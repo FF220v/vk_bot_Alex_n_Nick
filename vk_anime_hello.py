@@ -42,6 +42,7 @@ class VkLongPollThread(Thread):
 if __name__ == '__main__':
     access_file = open('access.json')
     access_dict = json.load(access_file)
+    access_file.close()
     login = access_dict['access_list']['login']
     password = access_dict['access_list']['password']
     api = vk_api.VkApi(login = login, password = password)
