@@ -34,7 +34,7 @@ class VkLongPollThread(Thread):
                         if msg['peer_id'] == 2000000182 and (anime_set.intersection(set(msg['text'].split())))!=set() and msg['from_id'] != 94734732:
                             self.vk_met.messages.send(peer_id = msg['peer_id'], message = 'Привет =)', random_id = randint(0, 0xFFFFFFFFFFFFFFFF))
                         
-                        if (joke_set.intersection(set(msg['text'].split())))!=set():
+                        if (joke_set.intersection(set(msg['text'].split())))!=set() and msg['from_id'] != 94734732:
                             url = 'https://bash.im/random/'
                             r = requests.get(url)
                             i = r.text.find('<div class="text">')
