@@ -5,8 +5,12 @@ from pprint import pprint
 from threading import Thread
 from time import sleep
 from random import randint
+import requests
+import html2text
 
 anime_set = set(['в','Ской','ты','вам','бан','Хэйтер','аниме', 'анима', 'онеме', 'Ня', 'говно','Аниме','ОНЕМЕ','Алиса','Привет','Саня','дороу','привет','Здарова','Ты','Я','ты','не','мы'])
+joke_set = set(['анекдот','Анекдот','шутка','шутку','Шутка'])
+
 
 class VkLongPollThread(Thread):
 
@@ -26,8 +30,17 @@ class VkLongPollThread(Thread):
                         msg = event.message_data
                         user = self.vk_met.users.get(user_id = msg['from_id'])
                         print(user[0]['first_name'] + ' ' + user[0]['last_name'] + ': ' + msg['text'])
+                        
                         if msg['peer_id'] == 2000000182 and (anime_set.intersection(set(msg['text'].split())))!=set() and msg['from_id'] != 94734732:
                             self.vk_met.messages.send(peer_id = msg['peer_id'], message = 'Привет =)', random_id = randint(0, 0xFFFFFFFFFFFFFFFF))
+                        
+                        if (joke_set.intersection(set(msg['text'].split())))!=set():
+                            url = 'https://bash.im/random/'
+                            r = requests.get(url)
+                            i = r.text.find('<div class="text">')
+                            k = r.text.find('</div>',i)
+                            self.vk_met.messages.send(peer_id = msg['peer_id'], message = 'Анекдот:\n------------------------------------------------\n'+html2text.html2text(r.text[i:k+6])+'\n------------------------------------------------', random_id = randint(0, 0xFFFFFFFFFFFFFFFF))                           
+
             except:
                 print('error occured')
 
